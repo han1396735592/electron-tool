@@ -12,11 +12,16 @@ try {
 Vue.use(Router)
 import Home from "@views/Home";
 
+import SerialportHelp from "@views/tool/SerialportHelp";
+
 export default new Router({
     base: process.env.BASE_URL,
     scrollBehavior: () => ({y: 0}),
     routes: [{
         path: '/',
         component: Home
+    }, {
+        path: '/serialportHelp',
+        component: SerialportHelp
     }]
 })

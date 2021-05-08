@@ -47,8 +47,8 @@ function createWindow() {
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-            nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-            // nodeIntegration: true
+            // nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+            nodeIntegration: true,
             preload: path.join(__dirname, './preload.js')
         },
     })
@@ -175,20 +175,3 @@ app.on('ready', async () => {
         globalShortcutRegister()
     })
 })
-ipcMain.on('openAutoStart', () => {
-    console.log('updateExe', ex)
-    app.setLoginItemSettings({
-        openAtLogin: true,
-        path: ex,
-        args: []
-    });
-});
-// 关闭 开机自启动
-ipcMain.on('closeAutoStart', () => {
-    app.setLoginItemSettings({
-        openAtLogin: false,
-        path: ex,
-        args: []
-    });
-})
-
