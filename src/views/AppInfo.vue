@@ -1,20 +1,11 @@
 <template>
   <div>
-    <!--    应用信息-->
-    <!--    {{ execPath }}-->
-    <!--    {{ appName }} {{ version }}-->
-    <!--    {{ loginSetting.openAtLogin }}-->
-    <!--    <a-switch :value="loginSetting.openAtLogin" @change="openAtLogin"></a-switch>-->
-    <!--    <a-button @click="checkUpdate" type="primary">检查更新</a-button>-->
-    <!--    <a-button @click="$electron.remote.getCurrentWebContents().openDevTools()" type="primary">调试窗口</a-button>-->
-
-
     <a-row type="flex" justify="center" align="top">
       <a-col :span="8">
         <span style="font-size: 18px">
                   软件名称:
           <span style="font-size: 24px;color: #2eabff">
-            4d智慧盘点平台
+            electron-tool
           </span>
         </span>
       </a-col>

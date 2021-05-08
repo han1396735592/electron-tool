@@ -83,13 +83,16 @@
         <a-layout-content
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
         >
+          <AppInfo></AppInfo>
         </a-layout-content>
       </a-layout>
     </a-layout>
   </a-layout>
 </template>
 <script>
+import AppInfo from "@/views/AppInfo";
 export default {
+  components: {AppInfo},
   data() {
     return {
       collapsed: false,
