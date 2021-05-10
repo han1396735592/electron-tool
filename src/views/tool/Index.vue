@@ -4,13 +4,13 @@
     <a-row>
       <a-col span="12">
         <a-button type="primary" @click="$refs.addChannelModal.add('left')">添加</a-button>
-        <a-tabs v-for="(item,index) in left">
-          <a-tab-pane :key="index" :tab="item.name">
+        <a-tabs>
+          <a-tab-pane :key="index" :tab="CHANNEL_NAME_MAP[item.type].name" v-for="(item,index) in left">
             <div v-if="$refs[`left-channel-${index}`]">
               {{ $refs[`left-channel-${index}`][0].connected }}
             </div>
             <component
-                v-bind:is="item.component"
+                v-bind:is="CHANNEL_NAME_MAP[item.type].component"
                 :initParam="item.param"
                 :autoOpen="item.autoOpen"
                 :ref="`left-channel-${index}`"
@@ -21,13 +21,13 @@
       </a-col>
       <a-col span="12">
         <a-button type="primary" @click="$refs.addChannelModal.add('right')">添加</a-button>
-        <a-tabs v-for="(item,index) in right">
-          <a-tab-pane :key="index" :tab="item.name">
+        <a-tabs>
+          <a-tab-pane :key="index" :tab="CHANNEL_NAME_MAP[item.type].name" v-for="(item,index) in right">
             <div v-if="$refs[`left-channel-${index}`]">
               {{ $refs[`left-channel-${index}`][0].connected }}
             </div>
             <component
-                v-bind:is="item.component"
+                v-bind:is="CHANNEL_NAME_MAP[item.type].component"
                 :initParam="item.param"
                 :autoOpen="item.autoOpen"
                 :ref="`right-channel-${index}`"
@@ -45,9 +45,13 @@ import AliIotMqttDtu from "@views/tool/AliIotMqttDtu";
 import SerialportHelp from "@views/tool/SerialportHelp";
 import AddChannel from "@views/tool/AddChannel";
 
+import {CHANNEL_NAME_MAP} from './const'
+
+
 export default {
   data() {
     return {
+      CHANNEL_NAME_MAP,
       left: [],
       right: [],
     };

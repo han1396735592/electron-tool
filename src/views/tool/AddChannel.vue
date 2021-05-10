@@ -7,9 +7,9 @@
   >
     <a-form>
       <a-form-item label="连接组件">
-        <a-select style="width: 100%" v-model="obj.component">
-          <a-select-option v-for="item in componentOption" :key="item">
-            {{ item }}
+        <a-select style="width: 100%" v-model="obj.type">
+          <a-select-option v-for="(item,key) in CHANNEL_NAME_MAP" :key="key">
+            {{ item.name }}
           </a-select-option>
         </a-select>
 
@@ -45,14 +45,17 @@
 </template>
 
 <script>
+
+import {CHANNEL_NAME_MAP} from './const'
+
 export default {
   name: "AddChannel",
   data() {
     return {
-      componentOption: ['AliIotMqttDtu', 'SerialportHelp'],
+      CHANNEL_NAME_MAP,
       obj: {
         name: '',
-        component: 'SerialportHelp',
+        type: '',
       },
       initParam: {
         'SerialportHelp': {
