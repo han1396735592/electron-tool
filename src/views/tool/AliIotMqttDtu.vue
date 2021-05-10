@@ -1,65 +1,174 @@
 <template>
-  <div>
-
-    <a-input v-model="deviceInfo.productKey"></a-input>
-    <a-input v-model="deviceInfo.deviceName"></a-input>
-    <a-input v-model="deviceInfo.deviceSecret"></a-input>
-
-    <a-button @click="init">连接</a-button>
-  </div>
+  <a-card title="阿里云DTU">
+    <a-row>
+      <a-col :span="8">
+        <a-form>
+          <a-form-item label="productKey">
+            <a-input v-model="deviceInfo.productKey" :disabled="iotConnected"></a-input>
+          </a-form-item>
+          <a-form-item label="deviceName">
+            <a-input v-model="deviceInfo.deviceName" :disabled="iotConnected"></a-input>
+          </a-form-item>
+          <a-form-item label="deviceSecret">
+            <a-input v-model="deviceInfo.deviceSecret" :disabled="iotConnected"></a-input>
+          </a-form-item>
+        </a-form>
+      </a-col>
+      <a-col offset="2" :span="14">
+        <div class="">
+          <a-button type="primary" @click="open" v-if="!iotConnected">连接</a-button>
+          <a-button v-else type="danger" @click="close">关闭</a-button>
+          <br>
+        </div>
+        <a-form>
+          <a-form-item label="接收数据">
+            <div id="res">
+              <a-list style="height: 100%" :dataSource="resData">
+                <a-list-item slot="renderItem" style="margin-left: 2px" slot-scope="item, index">
+                  <a-tag style="margin-left: 2px" v-if="showTime">
+                    {{ moment(timeList[index]).format('hh:mm:ss') }}
+                  </a-tag>
+                  <a-tag color="pink"> {{ index + 1 }}</a-tag>
+                  : {{ receiveHex ? item.toString('hex') : item }}
+                </a-list-item>
+              </a-list>
+            </div>
+            <a-button type="primary" @click="resData=[] ,timeList=[]">清除</a-button>
+            <a-checkbox v-model="receiveHex">HEX</a-checkbox>
+            <a-checkbox v-model="showTime">显示时间</a-checkbox>
+          </a-form-item>
+          <a-form-item label="发送数据">
+            <a-textarea rows="4" v-model="sendText"></a-textarea>
+            <a-button type="primary" :disabled="!iotConnected || !sendText" @click="send">发送</a-button>
+            <a-checkbox v-model="sendHex">HEX</a-checkbox>
+            <a-checkbox v-model="timedSending.open">定时发送</a-checkbox>
+            <a-input-number v-model="timedSending.time"></a-input-number>
+            ms
+          </a-form-item>
+        </a-form>
+      </a-col>
+    </a-row>
+  </a-card>
 </template>
 
 <script>
 
-// node引入包名
-const iot = require('alibabacloud-iot-device-sdk');
-
+const iot = require('alibabacloud-iot-device-sdk/dist/alibabacloud-iot-device-sdk');
+import moment from 'moment'
+import channelMixin from "@views/tool/channelMixin";
 
 export default {
   name: "AliIotMqttDtu",
-
+  mixins: [channelMixin],
   data() {
     return {
-      deviceInfo: {
-        productKey: '<productKey>', //将<productKey>修改为实际产品的ProductKey
-        deviceName: '<deviceName>',//将<deviceName>修改为实际设备的DeviceName
-        deviceSecret: '<deviceSecret>',//将<deviceSecret>修改为实际设备的DeviceSecret
-      },
+      moment,
+      deviceInfo: {},
+      resData: [],
+      timeList: [],
+      sendHex: true,
+      receiveHex: true,
+      showTime: true,
+      sendText: '',
       iotDevice: null,
+      timedSending: {
+        time: 100,
+        open: false
+      }
+    }
+  },
+
+  computed: {
+    iot_up_raw_topic() {
+      let {productKey, deviceName} = this.deviceInfo
+      return `/sys/${productKey}/${deviceName}/thing/model/up_raw`
+    },
+    iot_down_raw_topic() {
+      let {productKey, deviceName} = this.deviceInfo
+      return `/sys/${productKey}/${deviceName}/thing/model/down_raw`
+    },
+
+    iotConnected() {
+      if (this.iotDevice) {
+        return this.iotDevice.connected
+      }
+      return false
+    }
+  },
+  watch: {
+    iotConnected(flag) {
+      this.connected = flag
     }
   },
 
   methods: {
-    init() {
-      //创建iot.device对象将会发起到阿里云IoT的连接
-      const device = iot.device(this.deviceInfo);
+    close() {
+      console.log("close iotDevice")
+      if (this.iotDevice) {
+        this.iotDevice.end()
+      }
+    },
+    inputData(data) {
+      console.log("input ", data)
+      let {iotDevice, iot_up_raw_topic} = this
+      iotDevice.publish(iot_up_raw_topic, data)
+    },
+
+    send() {
+      const that = this
+      let {iotDevice, iot_up_raw_topic} = that
+      let data = Buffer.from(that.sendText, that.sendHex ? 'HEX' : 'ascii')
+      iotDevice.publish(iot_up_raw_topic, data)
+    },
+    init(deviceInfo) {
+      this.deviceInfo = deviceInfo
+      return true
+    },
+    open() {
+      let that = this
+      let device = iot.device({
+        ...that.deviceInfo
+      });
       this.iotDevice = device
       //监听connect事件
       device.on('connect', () => {
-        let {productKey, deviceName} = this.deviceInfo
-        //将<productKey> <deviceName>修改为实际值
-        device.subscribe(`/${productKey}/${deviceName}/user/get`);
         console.log('connect successfully!');
-        device.publish(`/${productKey}/${deviceName}/user/update`, 'hello world!');
+        this.$message.success("connect successfully!")
+      });
+      device.on('error', (err) => {
+        console.log('error:', err);
       });
 
-//监听message事件
+      device.on('close', () => {
+        this.connected = false
+      })
+
+      device.on('offline', () => {
+        this.connected = false
+      })
+
       device.on('message', (topic, payload) => {
-        console.log(topic, payload.toString());
+        if (topic === that.iot_down_raw_topic) {
+          that.resData.push(payload)
+          that.timeList.push(new Date())
+          that.__output(payload)
+        }
       });
     }
-
   },
-
-  created() {
-
-
-  }
-
 
 }
 </script>
 
 <style scoped>
+#res {
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  overflow: auto;
+  height: 200px;
+}
 
+button {
+  margin-right: 10px;
+}
 </style>

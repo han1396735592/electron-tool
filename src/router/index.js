@@ -13,13 +13,15 @@ Vue.use(Router)
 import Home from "@views/Home";
 
 import SerialportHelp from "@views/tool/SerialportHelp";
+import AliIotMqttDtu from "@views/tool/AliIotMqttDtu";
+import Index from "@views/tool/Index";
 
 export default new Router({
     base: process.env.BASE_URL,
     scrollBehavior: () => ({y: 0}),
     routes: [{
         path: '/',
-        component: Home
+        component: Index
     }, {
         path: '/serialportHelp',
         component: SerialportHelp

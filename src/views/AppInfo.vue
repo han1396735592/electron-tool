@@ -15,7 +15,7 @@
         <a-button type="primary" @click="checkUpdate">检查更新</a-button>
       </a-col>
 
-      <a-col :span="4">
+      <a-col :span="4" v-if="loginSetting">
         开机启动:
         <a-switch v-model="loginSetting.openAtLogin" @change="openAtLogin">
         </a-switch>
