@@ -1,15 +1,13 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <a-popover title="Title" style="position: fixed;bottom: 40px;right: 40px">
-      <template slot="content">
-        <p>Content</p>
-        <p>Content</p>
-      </template>
-      <a-button type="primary">
-        Hover me
-      </a-button>
-    </a-popover>
+    <!--    <a-popover title="Title" style="position: fixed;bottom: 40px;right: 40px">-->
+    <!--      <template slot="content">-->
+    <!--      </template>-->
+    <a-button type="primary" @click="$router.push({path:'/'})" style="position: fixed;bottom: 40px;right: 40px">
+      首页
+    </a-button>
+    <!--    </a-popover>-->
   </div>
 </template>
 <script>

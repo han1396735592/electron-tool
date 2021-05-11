@@ -121,7 +121,7 @@ export default {
   methods: {
     inputData(data) {
       console.log("input ", data)
-      if (this.serialport){
+      if (this.serialport) {
         this.serialport.write(data)
       }
     },
@@ -148,7 +148,9 @@ export default {
       that.serialport.write(Buffer.from(that.sendText, that.sendHex ? 'HEX' : 'ascii'))
     },
     close() {
-      this.serialport.close()
+      if (this.serialport) {
+        this.serialport.close()
+      }
       this.serialport = null
       this.connected = false
     }

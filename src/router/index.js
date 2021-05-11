@@ -10,21 +10,41 @@ try {
 }
 
 Vue.use(Router)
-import Home from "@views/Home";
 
-import SerialportHelp from "@views/tool/SerialportHelp";
-import AliIotMqttDtu from "@views/tool/AliIotMqttDtu";
-import Index from "@views/tool/Index";
-import TcpServer from "@views/tool/TcpServer";
+import Home from "@views/Home";
+import {CHANNEL_NAME_MAP} from '@views/tool/const'
+
+const dynamicComponent = []
+for (let channelNameMapKey in CHANNEL_NAME_MAP) {
+    dynamicComponent.push({
+        path: "/" + channelNameMapKey,
+        meta: {
+            title: CHANNEL_NAME_MAP[channelNameMapKey].name
+        },
+        component: () => import('@views/tool/' + CHANNEL_NAME_MAP[channelNameMapKey].component)
+    })
+}
 
 export default new Router({
     base: process.env.BASE_URL,
     scrollBehavior: () => ({y: 0}),
     routes: [{
         path: '/',
-        component: Index
-    }, {
-        path: '/serialportHelp',
-        component: SerialportHelp
-    }]
+        component: Home,
+        redirect: "/info",
+        children: [{
+            path: '/info',
+            meta: {
+                title: '首页'
+            },
+            component: () => import('@views/AppInfo')
+        }, ...dynamicComponent, {
+            path: '/forward',
+            meta: {
+                title: '数据转发'
+            },
+            component: () => import('@views/tool/Index')
+        }]
+    }
+    ]
 })
