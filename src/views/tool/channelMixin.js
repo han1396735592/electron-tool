@@ -41,7 +41,7 @@ export default {
         }
     },
     created() {
-        console.log("created")
+        console.log("created",this.initParam)
         if (this.initParam) {
             if (this.init) {
                 if (this.init(Object.assign({}, this.initParam))) {

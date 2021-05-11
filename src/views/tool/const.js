@@ -8,8 +8,13 @@ export const CHANNEL_NAME_MAP = {
     serialport: {
         component: 'SerialportHelp',
         name: '串口'
+    }, tcpServer: {
+        component: 'TcpServer',
+        name: 'TcpServer'
+    }, tcpClient: {
+        component: 'TcpClient',
+        name: 'TcpClient'
     }
-
 }
 
 

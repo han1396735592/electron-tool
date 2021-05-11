@@ -15,6 +15,7 @@ import Home from "@views/Home";
 import SerialportHelp from "@views/tool/SerialportHelp";
 import AliIotMqttDtu from "@views/tool/AliIotMqttDtu";
 import Index from "@views/tool/Index";
+import TcpServer from "@views/tool/TcpServer";
 
 export default new Router({
     base: process.env.BASE_URL,

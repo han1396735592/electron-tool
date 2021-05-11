@@ -100,7 +100,10 @@ export default {
       this.connected = flag
     }
   },
-
+  updated() {
+    let divscll = document.getElementById('res')
+    divscll.scrollTop = divscll.scrollHeight
+  },
   methods: {
     close() {
       console.log("close iotDevice")

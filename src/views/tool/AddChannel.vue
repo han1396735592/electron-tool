@@ -58,31 +58,45 @@ export default {
         type: '',
       },
       initParam: {
-        'SerialportHelp': {
+        serialport: {
           path: ''
         },
-        AliIotMqttDtu: {}
+        aliIot: {},
+        tcpServer: {}
       },
       group: null
     }
   },
   methods: {
     close() {
+
+      this.reset()
+    },
+
+    reset() {
       this.group = null
       this.initParam = {
-        'SerialportHelp': {
+        serialport: {
           path: '',
         },
-        AliIotMqttDtu: {}
+        aliIot: {},
+        tcpServer: {}
       }
-      this.obj.name = null
-
+      this.obj = {
+        name: '',
+        type: '',
+      }
     },
     input() {
-      console.log(this.obj)
-      this.$emit("input", this.group, Object.assign(Object.assign({}, this.obj), {
-        initParam: this.initParam[this.obj.component]
-      }))
+      let {obj, initParam} = this
+      let data = Object.assign({
+        param: Object.assign({
+          sendHex: true,
+          receiveHex: true,
+        }, initParam[obj.type])
+      }, obj)
+      console.log(data)
+      this.$emit("input", this.group, data)
       this.close()
     },
     add(group) {

@@ -44,10 +44,9 @@
 import AliIotMqttDtu from "@views/tool/AliIotMqttDtu";
 import SerialportHelp from "@views/tool/SerialportHelp";
 import AddChannel from "@views/tool/AddChannel";
-
+import TcpServer from "@views/tool/TcpServer";
+import TcpClient from "@views/tool/TcpClient";
 import {CHANNEL_NAME_MAP} from './const'
-
-
 export default {
   data() {
     return {
@@ -59,7 +58,9 @@ export default {
   components: {
     AliIotMqttDtu,
     SerialportHelp,
-    AddChannel
+    AddChannel,
+    TcpServer,
+    TcpClient
   },
   methods: {
     addChannel(group, param) {
