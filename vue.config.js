@@ -42,23 +42,23 @@ module.exports = {
                 // appId: "cn.com.sinok.4d",
                 // productName: "智慧仓储",
                 // copyright: "Copyright © 2021 SINOK",
-                // publish: [
-                //     {
-                //         provider: "generic",
-                //         url: "https://4d.sinok.com.cn/desktop-program/cn.com.sinok.4d/release/" //更新服务器地址,可为空
-                //     }
-                // ]
-                // win: {//win相关配置
-                //     icon: "./build/icons/icon.ico",//图标，当前图标在根目录下，注意这里有两个坑
-                //     target: [
-                //         {
-                //             target: "nsis",//利用nsis制作安装程序
-                //             arch: [
-                //                 "x64",//64位
-                //             ]
-                //         }
-                //     ]
-                // },
+                publish: [
+                    {
+                        provider: "generic",
+                        url: "http://al.oss.qqhxj.cn/public/electron-tool/" //更新服务器地址,可为空
+                    }
+                ],
+                win: {
+                    icon: "./build/icons/icon.ico",//图标，当前图标在根目录下，注意这里有两个坑
+                    target: [
+                        {
+                            target: "nsis",//利用nsis制作安装程序
+                            arch: [
+                                "x64",//64位
+                            ]
+                        }
+                    ]
+                },
                 "extraResources": [
                     {
                         "from": "lib/",

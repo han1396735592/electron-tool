@@ -7,7 +7,7 @@
             <a-input v-model="host"></a-input>
           </a-form-item>
           <a-form-item label="端口">
-            <a-input-number v-model="port" :min="1024" :max="65536"></a-input-number>
+            <a-input-number v-model="port"  :max="65536"></a-input-number>
           </a-form-item>
         </a-form>
       </a-col>

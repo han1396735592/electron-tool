@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-row type="flex" justify="center" align="top">
-      <a-col :span="8">
+      <a-col :span="6">
         <span style="font-size: 18px">
                   软件名称:
           <span style="font-size: 24px;color: #2eabff">
@@ -9,13 +9,18 @@
           </span>
         </span>
       </a-col>
-      <a-col :span="8">
+      <a-col :span="6">
         版本:
         <a-tag color="blue">{{ version }}</a-tag>
         <a-button type="primary" @click="checkUpdate">检查更新</a-button>
       </a-col>
 
-      <a-col :span="4" v-if="loginSetting">
+      <a-col :span="6">
+        自动更新:
+        <a-switch v-model="autoUpdate">
+        </a-switch>
+      </a-col>
+      <a-col :span="6" v-if="loginSetting">
         开机启动:
         <a-switch v-model="loginSetting.openAtLogin" @change="openAtLogin">
         </a-switch>
@@ -40,18 +45,22 @@
 </template>
 
 <script>
-
 export default {
   name: "AppInfo",
   data() {
     let execPath = this.$electron.remote.process.execPath;
-// 获取可执行文件位置
     return {
+      autoUpdate: this.$electronStore.get("autoUpdater") || false,
       appName: this.$electronApp.name,
       version: this.$electronApp.getVersion(),
       getAppMetrics: this.$electronApp.getAppMetrics(),
       execPath: execPath,
       loginSetting: this.$electronApp.getLoginItemSettings()
+    }
+  },
+  watch: {
+    autoUpdate(value) {
+      this.$electronStore.set("autoUpdater", value)
     }
   },
   mounted() {
@@ -61,7 +70,8 @@ export default {
     }, 1000)
   }, methods: {
     checkUpdate() {
-      this.$message.info("已经是最新版本")
+      this.$electron.ipcRenderer.send("check-for-update", "http://al.oss.qqhxj.cn/public/electron-tool/")
+      this.autoUpdate = false
     },
     openAtLogin(flag) {
       this.$electronApp.setLoginItemSettings({
@@ -73,7 +83,6 @@ export default {
       this.$message.info("开机启动:【" + (flag ? "打开" : "关闭") + "】")
     }
   }
-
 }
 </script>
 
