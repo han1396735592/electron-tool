@@ -45,7 +45,7 @@ export default {
   created() {
     setInterval(() => {
       if (this.$electronStore.get("autoUpdater")) {
-        this.$electron.ipcRenderer.send("check-for-update", "http://al.oss.qqhxj.cn/public/electron-tool/")
+        this.$electron.ipcRenderer.send("check-for-update", process.env.VUE_APP_ELECTRON_TOOL_UPDATE_ADDRESS)
       }
     }, 10000)
     let that = this

@@ -12,3 +12,4 @@ window.appInfo = {
     version: appPackage.version
 }
 
+console.log(process.env)

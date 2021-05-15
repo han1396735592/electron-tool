@@ -39,15 +39,18 @@ module.exports = {
     pluginOptions: {
         electronBuilder: {
             builderOptions: {
-                // appId: "cn.com.sinok.4d",
-                // productName: "智慧仓储",
-                // copyright: "Copyright © 2021 SINOK",
+                appId: "cn.qqhxj.electron-tool",
+                productName: "electron-tool",
+                copyright: "Copyright © 2021 han1396735592",
                 publish: [
                     {
                         provider: "generic",
-                        url: "http://al.oss.qqhxj.cn/public/electron-tool/" //更新服务器地址,可为空
+                        url: "http://electron-tool.qqhxj.cn/download/releases" //更新服务器地址,可为空
                     }
                 ],
+                "electronDownload": {
+                    "mirror": "https://npm.taobao.org/mirrors/electron/"
+                },
                 win: {
                     icon: "./build/icons/icon.ico",//图标，当前图标在根目录下，注意这里有两个坑
                     target: [
@@ -58,6 +61,9 @@ module.exports = {
                             ]
                         }
                     ]
+                },
+                "mac": {
+                    "icon": "build/icons/icon.icns"
                 },
                 "extraResources": [
                     {
